@@ -246,7 +246,7 @@ Please see the GitHub page.
 
 ## AUTHORS
 
-**Hyungtaek Jung** and et al 2024.
+**Hyungtaek Jung** and et al. 2024.
 
 
 ## COPYRIGHT
