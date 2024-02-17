@@ -1,5 +1,5 @@
 # lrsv_oysters
-Long Read Structural Variations for Oysters: A collection of executed scripts for Crassostrea gigas PacBio reads.
+A collection of executed scripts for Crassostrea gigas PacBio reads.
 
 
 ## Brief Background
