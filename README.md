@@ -1,4 +1,4 @@
-# long_read_sv_oysters
+# Long Read Structural Variations for Oysters
 A collection of executed scripts for Crassostrea gigas PacBio reads.
 
 
