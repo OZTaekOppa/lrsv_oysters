@@ -11,12 +11,12 @@ Hyungtaek Jung et al. 2024: Unraveling the biotechnological potential of Crassos
 
 
 ## Contents:
-+ [LICENSE](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#license) 
-+ [GETTING STARTED](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#getting-started)
-+ [FAQ](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#faq)
-+ [WIKI PAGE](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#wiki-page)
-+ [AUTHORS](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#authors)
-+ [COPYRIGHT](https://github.com/OZTaekOppa/FastQHandler/blob/main/README.md#copyright)
++ [LICENSE](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#license) 
++ [GETTING STARTED](https://github.com/OZTaekOppa/lrsv_oystersr/blob/main/README.md#getting-started)
++ [FAQ](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#faq)
++ [WIKI PAGE](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#wiki-page)
++ [AUTHORS](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#authors)
++ [COPYRIGHT](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#copyright)
 
 
 
