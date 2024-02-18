@@ -7,16 +7,16 @@ A suite of scripts utilised for processing the Pacific oyster PacBio reads is av
 
 
 ## Citation
-Hyungtaek Jung et al. 2024: Unraveling the biotechnological potential of Crassostrea gigas: comparative genomics & structural variations, [BioRxiv](https://www.biorxiv.org/XXXX).
+Hyungtaek Jung et al. 2024: Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics and structural variations, [BioRxiv](https://www.biorxiv.org/XXXX).
 
 
 ## Contents:
 + [LICENSE](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#license) 
-+ [GETTING STARTED](https://github.com/OZTaekOppa/lrsv_oystersr/blob/main/README.md#getting-started)
-+ [FAQ](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#faq)
-+ [WIKI PAGE](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#wiki-page)
-+ [AUTHORS](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#authors)
-+ [COPYRIGHT](https://github.com/OZTaekOppa/lrsv_oysters/blob/main/README.md#copyright)
++ [GETTING STARTED](https://github.com/OZTaekOppa/lrsv_oysters#getting-started)
++ [FAQ](https://github.com/OZTaekOppa/lrsv_oysters#faq)
++ [WIKI PAGE](https://github.com/OZTaekOppa/lrsv_oysters#wiki-page)
++ [AUTHORS](https://github.com/OZTaekOppa/lrsv_oysters?tab=readme-ov-file#authors)
++ [COPYRIGHT](https://github.com/OZTaekOppa/lrsv_oysters?tab=readme-ov-file#copyright)
 
 
 
