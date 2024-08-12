@@ -234,6 +234,25 @@ SURVIVOR genComp CuteSV_Cg1Rmerged_Def.vcf CuteSV_Cg1Rmerged_Def.mat.txt
 - For specific parameter details, refer to the official website of [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR).
 
 
+### MUM&Co 
+- For generating assembly-based whole genome alignment, statistics, and identifying structural variations in genome assemblies:
+ 	+ Requirement: MUM&Co, MUMmer4, Samtools
+	+ Input: A fasta file.
+	+ Output: A summary report of assembly-based whole genome alignment statistics and a VCF file detailing structural variations.
+
+Usage
+```
+module load MUMandCo
+
+# A simple bash script of MUM&Co for genome assemblies
+bash mumandco_v3.8.sh -r /Cra_gig1/GCA_011032805.1_ASM1103280v1_genomic.fasta -q /Cra_gig2/GCF_902806645.1_cgigas_uk_roslin_v1_genomic.fasta -g 670000000 -t 16 -o MACCg1RCg2QOut -b
+
+```
+
+- MUM&Co can detect deletions, insertions, tandem duplications and tandem contractions (>=50bp & <=150kb) as well as inversions (>=1kb) and translocations (>=10kb).
+- For specific parameter details, refer to the official websites of [MUM&Co](https://github.com/SAMtoBAM/MUMandCo).
+
+
 ### Samplot
 - To generate visualisations of structural variants from SV coordinates and BAM files:
  	+ Requirement: Samplot
@@ -305,7 +324,7 @@ Please see the GitHub page.
 
 ## AUTHORS
 
-**Hyungtaek Jung** and et al. 2024.
+**Hyungtaek Jung** and et al. 2024 [Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics & structural variations](https://github.com/OZTaekOppa/lrsv_oysters/issues).
 
 
 ## COPYRIGHT
