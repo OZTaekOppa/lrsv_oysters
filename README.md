@@ -1,5 +1,6 @@
 # lrsv_oysters
-Long Read Structural Variations for Oysters: A collection of executed scripts for *Crassostrea gigas* PacBio reads.
+**Long Read Structural Variations (LRSV) for Oysters**
+In line with the FAIR principles (Findable, Accessible, Interoperable, and Reusable), the authors have provided a collection of scripts for analyzing structural variations in *Crassostrea gigas* PacBio reads. These scripts focus on read-mapping alignment-based approaches. However, a single script that focuses on assembly-based whole genome assembly (MUM&Co).
 
 
 ## Brief Background
