@@ -9,7 +9,7 @@ A suite of scripts utilised for processing the Pacific oyster PacBio reads is av
 
 
 ## Citation
-Hyungtaek Jung et al. 2024: Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics and structural variations, [BioRxiv](https://www.biorxiv.org/XXXX).
+Hyungtaek Jung et al. 2025: Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics and structural variations, [BioRxiv](https://www.biorxiv.org/XXXX).
 
 
 ## Contents:
