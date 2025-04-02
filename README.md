@@ -1,5 +1,6 @@
 # lrsv_oysters
 **Long Read Structural Variations (LRSV) for Oysters**
+
 In line with the FAIR principles (Findable, Accessible, Interoperable, and Reusable), the authors have provided a collection of scripts for analyzing structural variations in *Crassostrea gigas* PacBio reads. These scripts focus on read-mapping alignment-based approaches. However, a single script that focuses on assembly-based whole genome assembly (MUM&Co).
 
 
@@ -63,7 +64,7 @@ samtools flagstat LRA_Cg1RCg2PB.sorted.bam &> LRA_Cg1RCg2PB_stats.txt
 
 # CuteSV: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
 # BAM File Generation via LRA and Samtools
-# Utilise --genotype with CuteSV to Generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
+# Utilise --genotype with CuteSV to generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype LRA_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_LRACuteSV.vcf /Cgig1/LR_MappingSV/LRA --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
 ```
