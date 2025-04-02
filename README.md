@@ -1,7 +1,7 @@
 # lrsv_oysters
 **Long Read Structural Variations (LRSV) for Oysters**
 
-In line with the FAIR principles (Findable, Accessible, Interoperable, and Reusable), the authors have provided a collection of scripts for analyzing structural variations in *Crassostrea gigas* PacBio reads. These scripts focus on read-mapping alignment-based approaches. However, a single script that focuses on assembly-based whole genome assembly (MUM&Co).
+In line with the FAIR principles (Findable, Accessible, Interoperable, and Reusable), the authors have provided a collection of scripts for analyzing structural variations in *Crassostrea gigas* PacBio reads. These scripts focus on read-mapping alignment-based approaches. However, a single script that focuses on assembly-based whole genome assembly (MUM&Co). For a subprocess of this analysis, please see [this link](https://github.com/MSjeon27/lrsv_oysters)
 
 
 ## Brief Background
@@ -39,9 +39,9 @@ The present collection of scripts is primarily designed for analysing PacBio rea
 Each program has provided its own description.
 
 
-### LRA and CuteSV
+### LRA and variant calling tools (CuteSV and Sniffles2)
 - For generating read mapping, statistics, and identifying structural variations in PacBio reads:
- 	+ Requirement: LRA, Samtools, CuteSV
+ 	+ Requirement: LRA, Samtools, CuteSV, Sniffles2
 	+ Input: A fastq file.
 	+ Output: A summary report of read mapping statistics and a VCF file detailing structural variations.
 
@@ -50,6 +50,8 @@ Usage
 module load lra
 module load samtools
 module load cutesv
+module load sniffles2
+module load vcftools
 
 # LRA Indexing and Mapping for PacBio Data
 lra index -CLR /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta
@@ -67,14 +69,24 @@ samtools flagstat LRA_Cg1RCg2PB.sorted.bam &> LRA_Cg1RCg2PB_stats.txt
 # Utilise --genotype with CuteSV to generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype LRA_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_LRACuteSV.vcf /Cgig1/LR_MappingSV/LRA --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
+# Sniffles2: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
+# BAM File Generation via LRA and Samtools
+sniffles -i LRA_Cg1RCg2PB.sorted.bam --threads 8 -v Cg1RCg2PB_LRAsniffles.vcf
+
+# Perform quality control on each called variant
+# Use VCFtools to remove low-quality variants
+vcftools --vcf Cg1RCg2PB_LRACuteSV.vcf --recode --recode-INFO-all --out PASS_LRACuteSV --minQ 5.0
+vcftools --vcf Cg1RCg2PB_LRAsniffles.vcf --recode --recode-INFO-all --out PASS_LRASnF2 --remove-filtered-all
+
 ```
 
-- For specific parameter details, refer to the official websites of [LRA](https://github.com/ChaissonLab/LRA), [Samtools](https://github.com/samtools/samtools), and [CuteSV](https://github.com/tjiangHIT/cuteSV).
+- For specific parameter details, refer to the official websites of [LRA](https://github.com/ChaissonLab/LRA), [Samtools](https://github.com/samtools/samtools), [CuteSV](https://github.com/tjiangHIT/cuteSV), [Sniffles2](https://github.com/fritzsedlazeck/Sniffles), and [VCFtools](https://github.com/vcftools/vcftools).
 
 
-### Minimap2 and CuteSV
+
+### Minimap2 and variant calling tools (CuteSV and Sniffles2)
 - For generating read mapping, statistics, and identifying structural variations in PacBio reads:
- 	+ Requirement: Minimap2, Samtools, CuteSV
+ 	+ Requirement: Minimap2, Samtools, CuteSV, Sniffles2
 	+ Input: A fastq file.
 	+ Output: A summary report of read mapping statistics and a VCF file detailing structural variations.
 
@@ -83,6 +95,8 @@ Usage
 module load minimap2
 module load samtools
 module load cutesv
+module load sniffles2
+module load vcftools
 
 # Minimap2 Indexing and Mapping for PacBio Data
 minimap2 -ax map-pb /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta /Cgig2/Cgig2_PBallRN.fastq > MM2_Cg1RCg2PB.sam
@@ -99,14 +113,23 @@ samtools flagstat MM2_Cg1RCg2PB.sorted.bam &> MM2_Cg1RCg2PB_stats.txt
 # Utilise --genotype with CuteSV to Generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype MM2_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_MM2CuteSV.vcf /Cgig1/LR_MappingSV/MM2 --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
+# Sniffles2: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
+# BAM File Generation via Minimap2 and Samtools
+sniffles -i MM2_Cg1RCg2PB.sorted.bam --threads 8 -v Cg1RCg2PB_MM2sniffles.vcf
+
+# Perform quality control on each called variant
+# Use VCFtools to remove low-quality variants
+vcftools --vcf Cg1RCg2PB_MM2CuteSV.vcf --recode --recode-INFO-all --out PASS_MM2CuteSV --minQ 5.0
+vcftools --vcf Cg1RCg2PB_MM2sniffles.vcf --recode --recode-INFO-all --out PASS_MM2SnF2 --remove-filtered-all
+
 ```
 
-- For specific parameter details, refer to the official websites of [Minimap2](https://github.com/lh3/minimap2), [Samtools](https://github.com/samtools/samtools), and [CuteSV](https://github.com/tjiangHIT/cuteSV).
+- For specific parameter details, refer to the official websites of [Minimap2](https://github.com/lh3/minimap2), [Samtools](https://github.com/samtools/samtools), [CuteSV](https://github.com/tjiangHIT/cuteSV), [Sniffles2](https://github.com/fritzsedlazeck/Sniffles), and [VCFtools](https://github.com/vcftools/vcftools).
 
 
-### NGMLR and CuteSV
+### NGMLR and variant calling tools (CuteSV and Sniffles2)
 - For generating read mapping, statistics, and identifying structural variations in PacBio reads:
- 	+ Requirement: NGMLR, Samtools, CuteSV
+ 	+ Requirement: NGMLR, Samtools, CuteSV, Sniffles2
 	+ Input: A fastq file.
 	+ Output: A summary report of read mapping statistics and a VCF file detailing structural variations.
 
@@ -115,6 +138,8 @@ Usage
 module load ngmlr
 module load samtools
 module load cutesv
+module load sniffles2
+module load vcftools
 
 # NGMLR Indexing and Mapping for PacBio Data
 ngmlr -t 8 -r /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta -q /Cgig2/Cra_gig2_PBallRN.fastq -o NgmlR_Cg1RCg2PB.sam
@@ -131,14 +156,23 @@ samtools flagstat NgmlR_Cg1RCg2PB.sorted.bam &> NgmlR_Cg1RCg2PB_stats.txt
 # Utilise --genotype with CuteSV to Generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype NgmlR_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_NgMcuteSV.vcf /Cgig1/LR_MappingSV/NGMLR --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
+# Sniffles2: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
+# BAM File Generation via NGMLR and Samtools
+sniffles -i NgmlR_Cg1RCg2PB.sorted.bam --threads 8 -v Cg1RCg2PB_NgmlRsniffles.vcf
+
+# Perform quality control on each called variant
+# Use VCFtools to remove low-quality variants
+vcftools --vcf Cg1RCg2PB_NgmlRCuteSV.vcf --recode --recode-INFO-all --out PASS_NgmlRCuteSV --minQ 5.0
+vcftools --vcf Cg1RCg2PB_NgmlRsniffles.vcf --recode --recode-INFO-all --out PASS_NgmlRSnF2 --remove-filtered-all
+
 ```
 
-- For specific parameter details, refer to the official websites of [NGMLR](https://github.com/philres/ngmlr), [Samtools](https://github.com/samtools/samtools), and [CuteSV](https://github.com/tjiangHIT/cuteSV).
+- For specific parameter details, refer to the official websites of [NGMLR](https://github.com/philres/ngmlr), [Samtools](https://github.com/samtools/samtools), [CuteSV](https://github.com/tjiangHIT/cuteSV), [Sniffles2](https://github.com/fritzsedlazeck/Sniffles), and [VCFtools](https://github.com/vcftools/vcftools).
 
 
-### Vulcan and CuteSV
+### Vulcan and variant calling tools (CuteSV and Sniffles2)
 - For generating read mapping, statistics, and identifying structural variations in PacBio reads:
- 	+ Requirement: Vulcan, Samtools, CuteSV
+ 	+ Requirement: Vulcan, Samtools, CuteSV, Sniffles2
 	+ Input: A fastq file.
 	+ Output: A summary report of read mapping statistics and a VCF file detailing structural variations.
 
@@ -147,6 +181,8 @@ Usage
 module load vulcan
 module load samtools
 module load cutesv
+module load sniffles2
+module load vcftools
 
 # Vulcan Indexing and Mapping for PacBio Data
 vulcan -r /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta -i /Cgig2/Cra_gig2_PBallRN.fastq -w /Cgig1/LR_MappingSV/Vulcan/ -o VLCout_Cg1RCg2PB -t 8 -clr
@@ -163,14 +199,24 @@ samtools flagstat VLCout_Cg1RCg2PB.sorted.bam &> VLCout_Cg1RCg2PB_stats.txt
 # Utilise --genotype with CuteSV to Generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype VLCout_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_VLCcuteSV.vcf /Cgig1/LR_MappingSV/Vulcan --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
+# Sniffles2: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
+# BAM File Generation via Vulcan and Samtools v1.9
+sniffles -i VLC_Cg1RCg2PB.sorted.bam --threads 8 -v Cg1RCg2PB_VLCsniffles.vcf
+
+# Perform quality control on each called variant
+# Use VCFtools to remove low-quality variants
+vcftools --vcf Cg1RCg2PB_VLCCuteSV.vcf --recode --recode-INFO-all --out PASS_VLCCuteSV --minQ 5.0
+vcftools --vcf Cg1RCg2PB_VLCsniffles.vcf --recode --recode-INFO-all --out PASS_VLCSnF2 --remove-filtered-all
+
 ```
 
-- For specific parameter details, refer to the official websites of [Vulcan](https://gitlab.com/treangenlab/vulcan), [Samtools](https://github.com/samtools/samtools), and [CuteSV](https://github.com/tjiangHIT/cuteSV).
+- For specific parameter details, refer to the official websites of [Vulcan](https://gitlab.com/treangenlab/vulcan), [Samtools](https://github.com/samtools/samtools), [CuteSV](https://github.com/tjiangHIT/cuteSV), [Sniffles2](https://github.com/fritzsedlazeck/Sniffles), and [VCFtools](https://github.com/vcftools/vcftools).
 
 
-### Winnowmap2 and CuteSV
+
+### Winnowmap2 and variant calling tools (CuteSV and Sniffles2)
 - For generating read mapping, statistics, and identifying structural variations in PacBio reads:
- 	+ Requirement: Winnowmap2, Samtools, CuteSV
+ 	+ Requirement: Winnowmap2, Samtools, CuteSV, Sniffles2
 	+ Input: A fastq file.
 	+ Output: A summary report of read mapping statistics and a VCF file detailing structural variations.
 
@@ -179,6 +225,8 @@ Usage
 module load winnowmap2
 module load samtools
 module load cutesv
+module load sniffles2
+module load vcftools
 
 # Winnowmap2 Indexing and Mapping for PacBio Data
 vulcan -r /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta -i /Cgig2/Cra_gig2_PBallRN.fastq -w /Cgig1/LR_MappingSV/Vulcan/ -o VLCout_Cg1RCg2PB -t 8 -clr
@@ -202,9 +250,19 @@ samtools flagstat WnM_Cg1RCg2PB.sorted.bam &> WnM_Cg1RCg2PB_stats.txt
 # Utilise --genotype with CuteSV to Generate a Genotype Score, a Prerequisite for SURVIVOR Analysis
 cuteSV --genotype WnM_Cg1RCg2PB.sorted.bam /Cgig1/GCA_011032805.1_ASM1103280v1_genomic.fasta Cg1RCg2PB_WnMcuteSV.vcf /Cgig1/LR_MappingSV/WinnowMap --threads 8 --max_cluster_bias_INS 100 --diff_ratio_merging_INS 0.3 --max_cluster_bias_DEL 200 --diff_ratio_merging_DEL 0.5
 
+# Sniffles2: Aligning Cg2 PacBio Data Against the Cg1 Reference Genome
+# BAM File Generation via Winnowmap2 and Samtools
+sniffles -i WnM_Cg1RCg2PB.sorted.bam --threads 8 -v Cg1RCg2PB_WnMsniffles.vcf
+
+# Perform quality control on each called variant
+# Use VCFtools to remove low-quality variants
+vcftools --vcf Cg1RCg2PB_WnMCuteSV.vcf --recode --recode-INFO-all --out PASS_WnMCuteSV --minQ 5.0
+vcftools --vcf Cg1RCg2PB_WnMsniffles.vcf --recode --recode-INFO-all --out PASS_WnMSnF2 --remove-filtered-all
+
 ```
 
-- For specific parameter details, refer to the official websites of [Winnowmap2](https://github.com/marbl/Winnowmap), [Samtools](https://github.com/samtools/samtools), and [CuteSV](https://github.com/tjiangHIT/cuteSV).
+- For specific parameter details, refer to the official websites of [Winnowmap2](https://github.com/marbl/Winnowmap), [Samtools](https://github.com/samtools/samtools), [CuteSV](https://github.com/tjiangHIT/cuteSV), [Sniffles2](https://github.com/fritzsedlazeck/Sniffles), and [VCFtools](https://github.com/vcftools/vcftools).
+
 
 
 ### SURVIVOR
@@ -218,22 +276,24 @@ Usage
 module load survivor
 
 # Merging VCF files
-SURVIVOR merge LRASV_files 1000 2 1 1 0 30 LRASV_Cg1Rmerged_Def.vcf
-SURVIVOR merge MM2SV_files 1000 2 1 1 0 30 MM2SV_Cg1Rmerged_Def.vcf
-SURVIVOR merge NgMSV_files 1000 2 1 1 0 30 NgMSV_Cg1Rmerged_Def.vcf
-SURVIVOR merge VLCSV_files 1000 2 1 1 0 30 VLCSV_Cg1Rmerged_Def.vcf
-SURVIVOR merge WnMSV_files 1000 2 1 1 0 30 WnMSV_Cg1Rmerged_Def.vcf
+SURVIVOR merge PASSED_LRASV_vcfs 400 2 1 1 0 30 LRASV_Cg1Rmerged_Def.vcf
+SURVIVOR merge PASSED_MM2SV_vcfs 400 2 1 1 0 30 MM2SV_Cg1Rmerged_Def.vcf
+SURVIVOR merge PASSED_NgMSV_vcfs 400 2 1 1 0 30 NgMSV_Cg1Rmerged_Def.vcf
+SURVIVOR merge PASSED_VLCSV_vcfs 400 2 1 1 0 30 VLCSV_Cg1Rmerged_Def.vcf
+SURVIVOR merge PASSED_WnMSV_vcfs 400 2 1 1 0 30 WnMSV_Cg1Rmerged_Def.vcf
 
 # Checking for Overlapping VCF Files with a PERL Script
 # Ensure to run the overlap.txt check each time to prevent overlapp.txt issues
 perl -ne 'print "$1\n" if /SUPP_VEC=([^,;]+)/' sample_merged.vcf | sed -e 's/\(.\)/\1 /g' > sample_merged_overlap.txt 
 
 # Plotting
-SURVIVOR genComp CuteSV_Cg1Rmerged_Def.vcf CuteSV_Cg1Rmerged_Def.mat.txt
+SURVIVOR genComp Cg1Rmerged_Def.vcf Cg1Rmerged_Def.mat.txt
 
 ```
 
 - For specific parameter details, refer to the official website of [SURVIVOR](https://github.com/fritzsedlazeck/SURVIVOR).
+
+
 
 
 ### MUM&Co 
@@ -253,6 +313,7 @@ bash mumandco_v3.8.sh -r /Cra_gig1/GCA_011032805.1_ASM1103280v1_genomic.fasta -q
 
 - MUM&Co can detect deletions, insertions, tandem duplications and tandem contractions (>=50bp & <=150kb) as well as inversions (>=1kb) and translocations (>=10kb).
 - For specific parameter details, refer to the official websites of [MUM&Co](https://github.com/SAMtoBAM/MUMandCo).
+
 
 
 ### Samplot
@@ -311,7 +372,7 @@ Usage
 
 ```
 
-- For specific parameter details, refer to the official website of [shinyCircos-V2.0](https://venyao.xyz/shinycircos/R).
+- For specific parameter details, refer to the official website of [shinyCircos-V2.0](https://venyao.xyz/shinycircos/).
 
 
 ## FAQ
@@ -326,7 +387,7 @@ Please see the GitHub page.
 
 ## AUTHORS
 
-**Hyungtaek Jung** and et al. 2024 [Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics & structural variations](https://github.com/OZTaekOppa/lrsv_oysters/issues).
+**Hyungtaek Jung** and et al. 2025 [Unraveling the biotechnological potential of *Crassostrea gigas*: comparative genomics & structural variations](https://github.com/OZTaekOppa/lrsv_oysters/issues).
 
 
 ## COPYRIGHT
